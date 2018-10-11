@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Theme Made By www.w3schools.com - No Copyright -->
+  <title>Bootstrap Theme Simply Me</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <style>
+    body {
+      font: 20px Montserrat, sans-serif;
+      line-height: 1.8;
+      color: #f5f6f7;
+    }
+
+    p {
+      font-size: 16px;
+    }
+
+    .margin {
+      margin-bottom: 45px;
+    }
+
+    .bg-1 {
+      background-color: hsla(189, 89%, 48%, 0.877);
+      /* Black Gray */
+    }
+
+    .bg-2 {
+      margin-top: 100px;
+      background-color: #2f2f2f;
+      /* Black Gray */
+    }
+
+    th {
+      text-align: center;
+    }
+
+    .bg-4 {
+      background-color: #2f2f2f;
+      /* Black Gray */
+      color: #fff;
+    }
+
+    .container-fluid {
+      padding-top: 50px;
+      padding-bottom: 50px;
+    }
+
+    .nav.navbar-nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    @media (min-width: 768px) {
+      .navbar-nav {
+        float: none;
+      }
+    }
+
+    .btnEdit {
+      background-color: rgb(0, 81, 255); /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    }
+    .btnRemove {
+      background-color: rgb(0, 81, 255); /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="main-nav navbar-fixed-top navbar-default" role="navigation">
+    <div class="container-fluid bg-1">
+      <ul class="nav navbar-nav">
+        <li class="nav-item">
+          <a class="page-scroll" href="#home">Alterar Produto</a>
+        </li>
+        <li class="nav-item">
+          <a class="page-scroll" href="#servicii">Alterar Loja</a>
+        </li>
+        <li class="nav-item">
+          <a class="page-scroll" href="#contact">Alterar Estoque</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- First Container -->
+
+  <div class="container-fluid bg-2 text-center">
+    <h2>Produtos</h2>
+    <p>Clique nos botões no campo de alterações para editar e remover uma coluna, caso queira adicionar clique no botao adicionar abaixo da tabela</p>
+    <table class="table table-bordered" id="tableProduto">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome Produto</th>
+          <th>Unidade</th>
+          <th>Alterações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>John</td>
+          <td>Doe</td>
+          <td>john@example.com</td>
+          <td>
+            <button class="button btnEdit" onclick="edit()" >Editar</button>
+            <button class= "button btnRemove" value="Delete" onclick="remove(this)" >Remover</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button class="button btnEdit" onclick="add()" >adicionar</button>
+    </div>
+    
+  </div>
+
+
+  <!-- Footer -->
+  <footer class="container-fluid bg-4 text-center">
+    <p>Site feito por Gabriel Chaves Ferreira</p>
+  </footer>
+  <script>
+    function edit() {
+
+    }
+    function remove(r) {
+      var i = r.parentNode.parentNode.rowIndex;
+      document.getElementById("tableProduto").deleteRow(i);
+    }
+
+    function add(){
+      var table = document.getElementById("tableProduto");
+    var row = table.insertRow(1);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+    cell1.innerHTML = "NEW CELL1";
+    cell2.innerHTML = "NEW CELL2";
+    cell3.innerHTML = "NEW CELL3";
+    }
+
+  </script>
+</body>
+
+</html>

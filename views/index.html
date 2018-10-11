@@ -1,0 +1,529 @@
+<html>
+
+<head>
+  <title>AngularJS + Bootstrap Table + NodeJS/Express RestAPIs</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="/static/js/angularJsApp.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+
+<style>
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+
+  li {
+    float: left;
+  }
+
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+  li a:hover:not(.active) {
+    background-color: #111;
+  }
+
+  .active {
+    background-color: #4CAF50;
+  }
+
+  footer {
+    background-color: rgb(140, 231, 211);
+    margin: 50px;
+    font-size: 3rem;
+    padding: 4rem 4em;
+  }
+
+  button {
+    display: inline-block;
+    border-radius: 3px;
+    border: none;
+    font-size: 1.2rem;
+    padding: 1.2rem 2em;
+    background: #69c773;
+    border-bottom: 1px solid #498b50;
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+    margin: 0 0 1em;
+    text-align: center;
+  }
+
+  h3 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 12rem;
+  }
+
+  table {
+    text-align: center;
+    table-layout: auto;
+  }
+
+  th {
+    text-align: center;
+  }
+
+  .div1 {
+    float: left;
+  }
+</style>
+
+<body>
+  <div>
+    <ul>
+      <li>
+        <a class="active" href="#Produtos">Produtos</a>
+      </li>
+      <li>
+        <a href="#loja" onClick="teste()">Loja</a>
+      </li>
+      <li>
+        <a href="#contact">Contact</a>
+      </li>
+      <li>
+        <a href="#about">About</a>
+      </li>
+    </ul>
+
+  </div>
+
+  <div id="div1" class="container" ng-app="app" ng-controller="jsaLoadCustomers">
+    <br>
+    <br>
+    <br>
+    <br>
+    <center>
+      <h3>Produtos</h3>
+    </center>
+
+
+    <div id="productList" class="container">
+
+      <table class="table table-bordered table-hover" id="tableProduto">
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Unidade</th>
+          <th>Alterações</th>
+        </tr>
+        <tbody>
+          <tr ng-repeat="cust in customers | orderBy : 'ID'" ng-class-even="'info'" ng-class-odd="'success'">
+            <td id="produtoId" >{{cust.ID}}</td>
+            <td id="produtoNome" contenteditable='true'>{{cust.Nome | uppercase}}</td>
+            <td id="produtoUnidade" contenteditable='true'>{{cust.Unidade}}</td>
+            <td>
+              <button class="button btnRemove" value="Save" onClick="saveProduto(this)">Salvar</button>
+              <button class="button btnRemove" value="Delete" onclick="removeProduto(this)">Remover</button>
+              <button class="button btnInit" onClick="Cancel()">Cancelar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="container">
+      <center>
+        <button id="btnAdicionar" class="button btnInit" ng-click="tableTemporaria = true">Adicionar</button>
+      </center>
+    </div>
+
+    <div class="container" ng-model="tableTemporaria" ng-if="tableTemporaria">
+      <table class="table table-bordered table-hover" id="tableProduto2">
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Unidade</th>
+          <th>Alterações</th>
+        </tr>
+        <tr>
+          <td contenteditable='true'></td>
+          <td contenteditable='true'></td>
+          <td contenteditable='true'></td>
+          <td>
+            <button class="button btnInit" onClick="Add(this)">Salvar</button>
+            <button class="button btnInit" onClick="Cancel()">Cancelar</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="div2" class="container" ng-app="app2" ng-controller="jsLoadLoja">
+    <br>
+    <br>
+    <br>
+    <br>
+    <center>
+      <h3>Lojas</h3>
+    </center>
+
+    <div id="lojaList" class="container">
+      <table class="table table-bordered table-hover" id="tableLoja">
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Alterações</th>
+        </tr>
+        <tbody>
+          <tr ng-repeat="currentLoja in loja | orderBy : 'ID'" ng-class-even="'info'" ng-class-odd="'success'">
+            <td id="lojaId">{{currentLoja.ID}}</td>
+            <td id="lojaNome" contenteditable='true'>{{currentLoja.Nome | uppercase}}</td>
+            <td>
+              <button class="button btnRemove" value="Save" onClick="saveLoja(this)">Salvar</button>
+              <button class="button btnRemove" value="Delete" onclick="removeLoja(this)">Remover</button>
+              <button class="button btnInit" onClick="Cancel()">Cancelar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="container">
+      <center>
+        <button id="btnAdicionar" class="button btnInit" ng-click="tableTemporaria = true">Adicionar</button>
+      </center>
+    </div>
+
+    <div class="container" ng-model="tableTemporaria" ng-if="tableTemporaria">
+      <table class="table table-bordered table-hover" id="tableLoja2">
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Alterações</th>
+        </tr>
+        <tr>
+          <td contenteditable='true'></td>
+          <td contenteditable='true'></td>
+          <td>
+            <button class="button btnInit" onClick="addLoja(this)">Salvar</button>
+            <button class="button btnInit" onClick="Cancel()">Cancelar</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="div3" class="container" ng-app="app3" ng-controller="jsLoadEstoque">
+    <br>
+    <br>
+    <br>
+    <br>
+    <center>
+      <h3>Estoques</h3>
+    </center>
+
+    <div id="estoqueList" class="container">
+      <table class="table table-bordered table-hover" id="tableEstoque">
+        <tr>
+          <th>ProdutoID</th>
+          <th>LojaID</th>
+          <th>Quantidade</th>
+          <th>Alterações</th>
+        </tr>
+        <tbody>
+          <tr ng-repeat="currentEstoque in estoque | orderBy : 'ID_Loja'" ng-class-even="'info'" ng-class-odd="'success'">
+            <td id="fk_ProdutoID">{{currentEstoque.ID_Produto}}</td>
+            <td id="fk_LojaID">{{currentEstoque.ID_Loja}}</td>
+            <td id="quantidade" contenteditable='true'>{{currentEstoque.Quantidade | uppercase}}</td>
+            <td>
+              <button class="button btnRemove" value="Save" onClick="saveEstoque(this)">Salvar</button>
+              <button class="button btnRemove" value="Delete" onclick="removeEstoque(this)">Remover</button>
+              <button class="button btnInit" onClick="Cancel()">Cancelar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <center>
+    <button id="btnAdicionarEstoque" ng-click="tableTemporaria = true">Adicionar</button>
+  </center>
+
+  <div class="container" ng-if="tableTemporaria">
+    <table class="table table-bordered table-hover" id="tableEstoque2">
+      <tr>
+        <th>ProdutoID</th>
+        <th>LojaID</th>
+        <th>Quantidade</th>
+        <th>Alterações</th>
+      </tr>
+      <td id="div4" class="container" ng-app="app4" ng-controller="jsLoadProdutoID" contenteditable='true'>
+        <select id="produtoSelected">
+          <option id="{{ 'produtoID' + $index }}" ng-repeat="x in IDs">{{x.ID}}</option>
+        </select>
+      </td>
+      <td id="div5" class="container" ng-app="app5" ng-controller="jsLoadLojaID" contenteditable='true'>
+        <select id="lojaSelected">
+          <option id="{{ 'lojaID' + $index }}" ng-repeat="x in IDs">{{x.ID}}</option>
+        </select>
+      </td>
+      <td id="estoqueQuantidade" contenteditable='true'></td>
+      <td>
+        <button class="button btnInit" onClick="addEstoque(this)">Salvar</button>
+
+      </td>
+    </table>
+  </div>
+
+  <div id="divFooter">
+    <footer class="container-fluid bg-4 text-center">
+      <p>Site feito por Gabriel Chaves Ferreira</p>
+    </footer>
+  </div>
+
+  <script>
+    angular.
+      bootstrap(document.getElementById("div2"), ['app2']);
+
+    angular.
+      bootstrap(document.getElementById("div3"), ['app3']);
+
+    angular.
+      bootstrap(document.getElementById("div4"), ['app4']);
+
+    angular.
+      bootstrap(document.getElementById("div5"), ['app5']);
+
+    function removeProduto(r) {
+      var ID = produtoId;
+      var i = r.parentNode.parentNode.rowIndex;
+      if (i == 1) {
+        if (ID.innerHTML == undefined) {
+          ID = ID[0].innerHTML;
+        } else {
+          ID = ID.innerHTML;
+        }
+        var array = [
+          {
+            "ID": ID
+          }
+        ]
+      } else {
+        ID = ID[i - 1].innerHTML;
+        var array = [
+          {
+            "ID": ID
+          }
+        ]
+      }
+      axios.post('/removeProduto', array)
+        .then(function (response) {
+          location.reload();
+        });
+    }
+
+    function Add(r) {
+      var Row = document.getElementById("tableProduto2");
+      var Cells = Row.getElementsByTagName("td");
+      var array = [
+        {
+          "ID": Cells[0].textContent,
+          "Nome": Cells[1].textContent,
+          "Unidade": Cells[2].textContent
+        }
+      ]
+      axios.post('/adicionaProduto', array)
+        .then(function (response) {
+          location.reload();
+        });
+    }
+
+    function saveProduto(r) {
+      var ID = produtoId;
+      var nome = produtoNome;
+      var unidade = produtoUnidade;
+      var i = r.parentNode.parentNode.rowIndex;
+      ID = ID[i - 1].innerHTML;
+      nome = nome[i - 1].innerHTML;
+      unidade = unidade[i - 1].innerHTML;
+
+      var array = [
+        {
+          "ID": ID,
+          "Nome": nome,
+          "Unidade": unidade
+        }
+      ]
+      axios.post('/updateProduto', array)
+        .then(function (response) {
+          location.reload();
+        });
+    }
+
+    function removeLoja(r) {
+      var ID = lojaId;
+      var i = r.parentNode.parentNode.rowIndex;
+      if (i == 1) {
+        if (ID.innerHTML == undefined) {
+          ID = ID[0].innerHTML;
+        } else {
+          ID = ID.innerHTML;
+        }
+        var array = [
+          {
+            "ID": ID
+          }
+        ]
+      } else {
+        ID = ID[i - 1].innerHTML;
+        var array = [
+          {
+            "ID": ID
+          }
+        ]
+      }
+      axios.post('/removeLoja', array)
+        .then(function (response) {
+          location.reload();
+        });
+    }
+
+    function addLoja(r) {
+      var Row = document.getElementById("tableLoja2");
+      var Cells = Row.getElementsByTagName("td");
+      var array = [
+        {
+          "ID": Cells[0].textContent,
+          "Nome": Cells[1].textContent,
+        }
+      ]
+      axios.post('/adicionaLoja', array)
+        .then(function (response) {
+          location.reload();
+        });
+    }
+
+    function saveLoja(r) {
+      var ID = lojaId;
+      var nome = lojaNome;
+      var i = r.parentNode.parentNode.rowIndex;
+      ID = ID[i - 1].innerHTML;
+      nome = nome[i - 1].innerHTML;
+
+      var array = [
+        {
+          "ID": ID,
+          "Nome": nome,
+        }
+      ]
+      axios.post('/updateLoja', array)
+        .then(function (response) {
+          location.reload();
+        });
+    }
+
+    function removeEstoque(r) {
+      var ProdutoID = fk_ProdutoID;
+      var LojaID = fk_LojaID;
+      var i = r.parentNode.parentNode.rowIndex;
+      if (i == 1) {
+        if (ProdutoID.innerHTML == undefined && LojaID.innerHTML == undefined) {
+          ProdutoID = ProdutoID[0].innerHTML;
+          LojaID = LojaID[0].innerHTML;
+        } else {
+          ProdutoID = ProdutoID.innerHTML;
+          LojaID = LojaID.innerHTML;
+        }
+        var array = [
+          {
+            "ID_Produto": ProdutoID,
+            "ID_Loja": LojaID
+          }
+        ]
+      } else {
+        ProdutoID = ProdutoID[i - 1].innerHTML;
+        LojaID = LojaID[i - 1].innerHTML;
+        var array = [
+          {
+            "ID_Produto": ProdutoID,
+            "ID_Loja": LojaID
+          }
+        ]
+      }
+
+      axios.post('/removeEstoque', array)
+        .then(function (response) {
+          location.reload();
+        });
+    }
+
+    function addEstoque(r) {
+      var i = r.parentNode.parentNode.rowIndex;
+      var selectedProdutoID = document.getElementById("produtoSelected").selectedIndex;
+      var selectedLojaIndex = document.getElementById("lojaSelected").selectedIndex;
+      var dropDownIDS = document.querySelectorAll('option');
+      for (var i = 0; i < dropDownIDS.length; ++i) {
+        var currentID = dropDownIDS[i].id;
+        indexSelected = currentID.slice(-1);
+        if (indexSelected == selectedProdutoID) {
+          var idPR = dropDownIDS[i].innerHTML;
+          for (var i = 0; i < dropDownIDS.length; ++i) {
+            currentID = dropDownIDS[i].id;
+            indexSelected = currentID.slice(-1);
+            if (indexSelected == selectedLojaIndex) {
+              var idLo = dropDownIDS[i].innerHTML;
+            }
+          }
+        }
+      }
+      var array = [
+        {
+          "ID_Produto": idPR,
+          "ID_Loja": idLo,
+          "Quantidade": estoqueQuantidade.textContent
+        }
+      ]
+      axios.post('/adicionaEstoque', array)
+        .then(function (response) {
+          location.reload();
+        });
+    }
+
+    function saveEstoque(r) {
+      var ProdutoID = fk_ProdutoID;
+      var LojaID = fk_LojaID;
+      var Quantidade = quantidade;
+      var i = r.parentNode.parentNode.rowIndex;
+      ProdutoID = ProdutoID[i - 1].innerHTML;
+      LojaID = LojaID[i - 1].innerHTML;
+      Quantidade = Quantidade[i - 1].innerHTML;
+      var array = [
+        {
+
+          "ID_Produto": ProdutoID,
+          "ID_Loja": LojaID,
+          "Quantidade": Quantidade
+        }
+      ]
+      axios.post('/updateEstoque', array)
+        .then(function (response) {
+          location.reload();
+        });
+    }
+
+    function Cancel() {
+      location.reload();
+    }
+
+
+  </script>
+</body>
+
+</html>

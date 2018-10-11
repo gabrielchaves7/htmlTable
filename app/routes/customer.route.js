@@ -1,0 +1,158 @@
+var knex = require('knex')({
+    client: 'mysql',
+    connection: {
+        host: '127.0.0.1',
+        user: 'nerus',
+        password: '123456',
+        database: 'chaves'
+    }
+});
+module.exports = function (app) {
+
+    var express = require("express");
+    var router = express.Router();
+
+    const controllerRoute = require('../controllers/customer.controller.js');
+
+    var path = __basedir + '/views/';
+
+    router.use(function (req, res, next) {
+        next();
+    });
+
+    app.use("/", router);
+
+    app.get('/', (req, res) => {
+        res.sendFile(path + "index.html");
+    });
+
+    // Retrieve all Lojas
+    app.get('/api/loja/all', controllerRoute.getLoja);
+    // Retrieve all Produtos
+    app.get('/api/produtos/all', controllerRoute.getAll);
+    // Retrieve all Estoque
+    app.get('/api/estoque/all', controllerRoute.getEstoque);
+
+    app.get('/api/produtoIDS/all', controllerRoute.getProdutoIDS);
+
+    app.get('/api/lojaIDS/all', controllerRoute.getLojaIDS);
+
+
+
+    app.post('/removeProduto', function (req, res) {
+        ID = req.body[0].ID;
+        knex('PRODUTO')
+            .where('ID', ID)
+            .del().then(function () {
+                res.sendFile(path + "index.html");
+            }).catch(function (err) {
+                res.sendFile(path + "index.html");
+                console.log(err);
+            });
+    });
+
+    app.post('/adicionaProduto', function (req, res) {
+
+        knex('PRODUTO')
+            .insert(req.body).then(function () {
+                res.send(path + "404.html");
+            }).catch(function (err) {
+                res.send(err);
+                console.log(err);
+            });
+    });
+
+    app.post('/updateProduto', function (req, res) {
+        ID = req.body[0].ID;
+        data = req.body[0]
+        knex('PRODUTO')
+            .where('ID', ID)
+            .update(data).then(function () {
+                res.sendFile(path + "index.html");
+            }).catch(function (err) {
+                res.send(err);
+                console.log(err);
+            });
+    });
+
+    app.post('/removeLoja', function (req, res) {
+        ID = req.body[0].ID;
+        knex('Loja')
+            .where('ID', ID)
+            .del().then(function () {
+                res.sendFile(path + "index.html");
+            }).catch(function (err) {
+                res.send(err);
+                console.log(err);
+            });
+    });
+
+    app.post('/adicionaLoja', function (req, res) {
+
+        knex('Loja')
+            .insert(req.body).then(function () {
+                res.send(path + "404.html");
+            }).catch(function (err) {
+                res.send(err);
+                console.log(err);
+            });
+    });
+
+    app.post('/updateLoja', function (req, res) {
+        ID = req.body[0].ID;
+        data = req.body[0];
+        knex('Loja')
+            .where('ID', ID)
+            .update(data).then(function () {
+                res.sendFile(path + "index.html");
+            }).catch(function (err) {
+                res.send(err);
+                console.log(err);
+            });
+    });
+
+    app.post('/removeEstoque', function (req, res) {
+        produtoID = req.body[0].ID_Produto;
+        lojaID = req.body[0].ID_Loja;
+        knex('Estoque')
+            .where({
+                'ID_Produto': produtoID,
+                'ID_Loja': lojaID
+            })
+            .del().then(function () {
+                res.sendFile(path + "index.html");
+            }).catch(function (err) {
+                res.send(err);
+                console.log(err);
+            });
+    });
+
+    app.post('/adicionaEstoque', function (req, res) {
+
+        knex('Estoque')
+            .insert(req.body).then(function () {
+                res.send(path + "404.html");
+            }).catch(function (err) {
+                res.send(err);
+                console.log(err);
+            });
+    });
+
+    app.post('/updateEstoque', function (req, res) {       
+        knex('Estoque')
+            .where({
+                'ID_Produto': req.body[0].ID_Produto,
+                'ID_Loja': req.body[0].ID_Loja
+            })
+            .update(req.body[0]).then(function () {
+                res.sendFile(path + "index.html");
+            }).catch(function (err) {
+                res.send(err);
+                console.log(err);
+            });
+    });
+
+    app.use("*", (req, res) => {
+        res.sendFile(path + "404.html");
+    });
+}
