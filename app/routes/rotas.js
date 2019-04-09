@@ -14,7 +14,7 @@ module.exports = function (app) {
 
     const controllerRoute = require('../controllers/customer.controller.js');
 
-    var path = __basedir + '/views/';
+    var path = __basedir + '/client/views/';
 
     router.use(function (req, res, next) {
         next();

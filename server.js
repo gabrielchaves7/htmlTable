@@ -6,7 +6,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('resources'));
 global.__basedir = __dirname;
 
-require('./app/routes/customer.route.js')(app);
+require('./app/routes/rotas.js')(app);
 
 // Create a Server
 var server = app.listen(8081, function () {

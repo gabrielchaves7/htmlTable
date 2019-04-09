@@ -7,6 +7,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   <script src="/static/js/angularJsApp.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 </head>
 
@@ -122,8 +123,8 @@
           <th>Unidade</th>
           <th>Alterações</th>
         </tr>
-        <tbody>
-          <tr ng-repeat="cust in customers | orderBy : 'ID'" ng-class-even="'info'" ng-class-odd="'success'">
+        <tbody class="tbody-produtos">
+          <tr id="tr-produto" ng-repeat="cust in customers | orderBy : 'ID'" ng-class-even="'info'" ng-class-odd="'success'">
             <td id="produtoId" >{{cust.ID}}</td>
             <td id="produtoNome" contenteditable='true'>{{cust.Nome | uppercase}}</td>
             <td id="produtoUnidade" contenteditable='true'>{{cust.Unidade}}</td>
@@ -152,11 +153,11 @@
           <th>Alterações</th>
         </tr>
         <tr>
-          <td contenteditable='true'></td>
-          <td contenteditable='true'></td>
-          <td contenteditable='true'></td>
+          <td class="idProduto" contenteditable='true'></td>
+          <td  class="nomeProduto" contenteditable='true'></td>
+          <td  class="unidadeProduto" contenteditable='true'></td>
           <td>
-            <button class="button btnInit" onClick="Add(this)">Salvar</button>
+            <button class="button btnInit" onClick="AddProduto(this)">Salvar</button>
             <button class="button btnInit" onClick="Cancel()">Cancelar</button>
           </td>
         </tr>
@@ -288,6 +289,27 @@
     </footer>
   </div>
 
+
+<div class="template" style="display: none">
+  <table>
+      <tbody>
+          <tr id="tr-produto">
+              <td id="produtoId" ></td>
+              <td id="produtoNome"></td>
+              <td id="produtoUnidade"></td>
+              <td>
+                  <button class="button btnRemove" value="Save" onClick="saveProduto(this)">Salvar</button>
+                  <button class="button btnRemove" value="Delete" onclick="removeProduto(this)">Remover</button>
+                  <button class="button btnInit" onClick="Cancel()">Cancelar</button>
+              </td>
+            </tr>
+      </tbody>  
+  </table>
+  
+</div>
+
+
+
   <script>
     angular.
       bootstrap(document.getElementById("div2"), ['app2']);
@@ -329,19 +351,27 @@
         });
     }
 
-    function Add(r) {
-      var Row = document.getElementById("tableProduto2");
-      var Cells = Row.getElementsByTagName("td");
+    function AddProduto(r) {
+      var id = $('.idProduto').text();
+      var nome = $('.nomeProduto').text();
+      var unidade = $('.unidadeProduto').text();
       var array = [
         {
-          "ID": Cells[0].textContent,
-          "Nome": Cells[1].textContent,
-          "Unidade": Cells[2].textContent
+          "ID": id,
+          "Nome": nome,
+          "Unidade": unidade
         }
       ]
+      var template = $('.template').find('tr').clone();
+      template.find('#produtoId').text(id);
+      template.find('#produtoNome').text(nome);
+      template.find('#produtoUnidade').text(unidade);
+
+      $('.tbody-produtos').append(template);
+
       axios.post('/adicionaProduto', array)
         .then(function (response) {
-          location.reload();
+          //location.reload();
         });
     }
 
