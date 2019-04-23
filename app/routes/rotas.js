@@ -12,7 +12,7 @@ module.exports = function (app) {
     var express = require("express");
     var router = express.Router();
 
-    const controllerRoute = require('../controllers/customer.controller.js');
+    const controllerRoute = require('../controllers/controller.js');
 
     var path = __basedir + '/client/views/';
 
@@ -40,39 +40,21 @@ module.exports = function (app) {
 
 
     app.post('/removeProduto', function (req, res) {
-        ID = req.body[0].ID;
-        knex('PRODUTO')
-            .where('ID', ID)
-            .del().then(function () {
-                res.sendFile(path + "index.html");
-            }).catch(function (err) {
-                res.sendFile(path + "index.html");
-                console.log(err);
-            });
+        var idProduto = req.body[0].ID;
+        controllerRoute.removeProduto(idProduto);  
     });
 
     app.post('/adicionaProduto', function (req, res) {
-
-        knex('PRODUTO')
-            .insert(req.body).then(function () {
-                res.send(path + "404.html");
-            }).catch(function (err) {
-                res.send(err);
-                console.log(err);
-            });
+        var produto = req.body;
+        controllerRoute.adicionaProduto(produto);
     });
 
     app.post('/updateProduto', function (req, res) {
-        ID = req.body[0].ID;
-        data = req.body[0]
-        knex('PRODUTO')
-            .where('ID', ID)
-            .update(data).then(function () {
-                res.sendFile(path + "index.html");
-            }).catch(function (err) {
-                res.send(err);
-                console.log(err);
-            });
+        var data = {
+            "ID": req.body[0].ID,
+            "Data": data = req.body[0]
+        }
+        controllerRoute.updateProduto(data);        
     });
 
     app.post('/removeLoja', function (req, res) {
