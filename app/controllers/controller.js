@@ -7,23 +7,10 @@ var knex = require('knex')({
         database: 'chaves'
     }
 });
-var _ = require('lodash');
 
-exports.getAll = (req, res) => {
+exports.getProdutos = (req, res) => {
     knex.select().from('PRODUTO').then(function (produtos) {
         res.send(produtos);
-    });
-};
-
-exports.getLoja = (req, res) => {
-    knex.select().from('LOJA').then(function (lojas) {
-        res.send(lojas);
-    });
-};
-
-exports.getEstoque = (req, res) => {
-    knex.select().from('Estoque').then(function (estoques) {
-        res.send(estoques);
     });
 };
 
@@ -33,15 +20,9 @@ exports.getProdutoIDS = (req, res) => {
     });
 };
 
-exports.getLojaIDS = (req, res) => {
-    knex.schema.raw("SELECT ID FROM LOJA").then(function (ID_LOJA) {
-        res.send(ID_LOJA);
-    });
-};
-
 exports.adicionaProduto = (req, res) => {
     knex('PRODUTO')
-        .insert(req.body).then(function () {
+        .insert(req).then(function () {
             res.send(path + "404.html");
         }).catch(function (err) {
             res.send(err);
@@ -63,6 +44,42 @@ exports.updateProduto = (req, res) => {
         });
 };
 
+exports.getLoja = (req, res) => {
+    knex.select().from('LOJA').then(function (lojas) {
+        res.send(lojas);
+    });
+};
+
+exports.getLojaIDS = (req, res) => {
+    knex.schema.raw("SELECT ID FROM LOJA").then(function (ID_LOJA) {
+        res.send(ID_LOJA);
+    });
+};
+
+exports.adicionaLoja = (req, res) => {
+    knex('Loja')
+        .insert(req).then(function () {
+            res.send(path + "404.html");
+        }).catch(function (err) {
+            res.send(err);
+            console.log(err);
+        });
+};
+
+exports.updateLoja = (req, res) => {
+    var id = req.id;
+    var data = req.data;
+    
+    knex('Loja')
+        .where('ID', id)
+        .update(data).then(function () {
+            res.sendFile(path + "index.html");
+        }).catch(function (err) {
+            res.send(err);
+            console.log(err);
+        });
+};
+
 exports.remove  = (req, res) => {
     var ID = req.id;
     var table = req.table
@@ -74,4 +91,48 @@ exports.remove  = (req, res) => {
             res.sendFile(path + "index.html");
             console.log(err);
     });
+};
+
+exports.getEstoque = (req, res) => {
+    knex.select().from('Estoque').then(function (estoques) {
+        res.send(estoques);
+    });
+};
+
+exports.removeEstoque  = (req, res) => {
+    knex('Estoque')
+        .where({
+            'ID_Produto': req.ID_Produto,
+            'ID_Loja': req.ID_Loja
+        })
+        .del().then(function () {
+            res.sendFile(path + "index.html");
+        }).catch(function (err) {
+            res.send(err);
+            console.log(err);
+        });
+};
+
+exports.updateEstoque = (req, res) => {
+    knex('Estoque')
+    .where({
+        'ID_Produto': req.ID_Produto,
+        'ID_Loja': req.ID_Loja
+    })
+    .update(req.body[0]).then(function () {
+        res.sendFile(path + "index.html");
+    }).catch(function (err) {
+        res.send(err);
+        console.log(err);
+    });
+};
+
+exports.adicionaEstoque = (req, res) => {
+    knex('Estoque')
+        .insert(req.body).then(function () {
+            res.send(path + "404.html");
+        }).catch(function (err) {
+            res.send(err);
+            console.log(err);
+        });
 };

@@ -104,7 +104,7 @@
 
   </div>
 
-  <div id="div1" class="container" ng-app="app" ng-controller="jsaLoadCustomers">
+  <div id="div1" class="container" ng-app="app" ng-controller="loadProdutos">
     <br>
     <br>
     <br>
@@ -345,7 +345,7 @@
           }
         ]
       }
-      axios.post('/removeProduto', array)
+      axios.post('/api/produtos', array)
         .then(function (response) {
           location.reload();
         });
@@ -391,7 +391,7 @@
           "Unidade": unidade
         }
       ]
-      axios.post('/updateProduto', array)
+      axios.put('/api/produtos', array)
         .then(function (response) {
           location.reload();
         });
@@ -488,7 +488,7 @@
         ]
       }
 
-      axios.post('/removeEstoque', array)
+      axios.post('/api/estoque', array)
         .then(function (response) {
           location.reload();
         });
@@ -542,7 +542,7 @@
           "Quantidade": Quantidade
         }
       ]
-      axios.post('/updateEstoque', array)
+      axios.put('/api/estoque', array)
         .then(function (response) {
           location.reload();
         });
