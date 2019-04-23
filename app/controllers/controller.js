@@ -39,18 +39,6 @@ exports.getLojaIDS = (req, res) => {
     });
 };
 
-exports.removeProduto = (req, res) => {
-    var ID = req;
-    knex('PRODUTO')
-        .where('ID', ID)
-        .del().then(function () {
-            res.send("Registro inserido com sucesso!");
-        }).catch(function (err) {
-            res.sendFile(path + "index.html");
-            console.log(err);
-    });
-};
-
 exports.adicionaProduto = (req, res) => {
     knex('PRODUTO')
         .insert(req.body).then(function () {
@@ -75,17 +63,15 @@ exports.updateProduto = (req, res) => {
         });
 };
 
-exports.removeLoja = (req, res) => {
-    var id = req.id;
-    var data = req.data;
-    
-    knex('PRODUTO')
+exports.remove  = (req, res) => {
+    var ID = req.id;
+    var table = req.table
+    knex(table)
         .where('ID', ID)
-        .update(data).then(function () {
-            res.sendFile(path + "index.html");
+        .del().then(function () {
+            res.send("Registro da tabela "+req.table+" removido com sucesso!");
         }).catch(function (err) {
-            res.send(err);
+            res.sendFile(path + "index.html");
             console.log(err);
-        });
+    });
 };
-

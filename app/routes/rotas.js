@@ -40,8 +40,8 @@ module.exports = function (app) {
 
 
     app.post('/removeProduto', function (req, res) {
-        var idProduto = req.body[0].ID;
-        controllerRoute.removeProduto(idProduto);  
+        var requisicao = gerarRequisicaoParaRemover(req.body[0].ID, "PRODUTO");
+        controllerRoute.remove(requisicao);  
     });
 
     app.post('/adicionaProduto', function (req, res) {
@@ -58,19 +58,11 @@ module.exports = function (app) {
     });
 
     app.post('/removeLoja', function (req, res) {
-        ID = req.body[0].ID;
-        knex('Loja')
-            .where('ID', ID)
-            .del().then(function () {
-                res.sendFile(path + "index.html");
-            }).catch(function (err) {
-                res.send(err);
-                console.log(err);
-            });
+        var requisicao = gerarRequisicaoParaRemover(req.body[0].ID, "LOJA");
+        controllerRoute.remove(requisicao);
     });
 
     app.post('/adicionaLoja', function (req, res) {
-
         knex('Loja')
             .insert(req.body).then(function () {
                 res.send(path + "404.html");
@@ -137,4 +129,13 @@ module.exports = function (app) {
     app.use("*", (req, res) => {
         res.sendFile(path + "404.html");
     });
+}
+
+function gerarRequisicaoParaRemover(id, table){
+    var obj = {
+        "id": id,
+        "table": table
+    };
+
+    return obj;
 }
