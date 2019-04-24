@@ -43,13 +43,6 @@
     background-color: #4CAF50;
   }
 
-  footer {
-    background-color: rgb(140, 231, 211);
-    margin: 50px;
-    font-size: 3rem;
-    padding: 4rem 4em;
-  }
-
   button {
     display: inline-block;
     border-radius: 3px;
@@ -86,32 +79,10 @@
 </style>
 
 <body>
-  <div>
-    <ul>
-      <li>
-        <a class="active" href="#Produtos">Produtos</a>
-      </li>
-      <li>
-        <a href="#loja" onClick="teste()">Loja</a>
-      </li>
-      <li>
-        <a href="#contact">Contact</a>
-      </li>
-      <li>
-        <a href="#about">About</a>
-      </li>
-    </ul>
 
-  </div>
-
-  <div id="div1" class="container" ng-app="app" ng-controller="loadProdutos">
-    <br>
-    <br>
-    <br>
-    <br>
-    <center>
+  <div ng-app="app">
+  <div id="div1" class="container" ng-controller="loadProdutos">                
       <h3>Produtos</h3>
-    </center>
 
 
     <div id="productList" class="container">
@@ -139,9 +110,7 @@
     </div>
 
     <div class="container">
-      <center>
         <button id="btnAdicionar" class="button btnInit" ng-click="tableTemporaria = true">Adicionar</button>
-      </center>
     </div>
 
     <div class="container" ng-model="tableTemporaria" ng-if="tableTemporaria">
@@ -165,14 +134,8 @@
     </div>
   </div>
 
-  <div id="div2" class="container" ng-app="app2" ng-controller="loadLoja">
-    <br>
-    <br>
-    <br>
-    <br>
-    <center>
+  <div id="div2" class="container" ng-controller="loadLoja">                
       <h3>Lojas</h3>
-    </center>
 
     <div id="lojaList" class="container">
       <table class="table table-bordered table-hover" id="tableLoja">
@@ -196,9 +159,7 @@
     </div>
 
     <div class="container">
-      <center>
         <button id="btnAdicionar" class="button btnInit" ng-click="tableTemporaria = true">Adicionar</button>
-      </center>
     </div>
 
     <div class="container" ng-model="tableTemporaria" ng-if="tableTemporaria">
@@ -219,15 +180,11 @@
       </table>
     </div>
   </div>
+  
 
-  <div id="div3" class="container" ng-app="app3" ng-controller="jsLoadEstoque">
-    <br>
-    <br>
-    <br>
-    <br>
-    <center>
+
+  <div id="div3" class="container" ng-controller="loadEstoque">                
       <h3>Estoques</h3>
-    </center>
 
     <div id="estoqueList" class="container">
       <table class="table table-bordered table-hover" id="tableEstoque">
@@ -252,10 +209,9 @@
       </table>
     </div>
   </div>
+</div>
 
-  <center>
     <button id="btnAdicionarEstoque" ng-click="tableTemporaria = true">Adicionar</button>
-  </center>
 
   <div class="container" ng-if="tableTemporaria">
     <table class="table table-bordered table-hover" id="tableEstoque2">
@@ -265,14 +221,14 @@
         <th>Quantidade</th>
         <th>Alterações</th>
       </tr>
-      <td id="div4" class="container" ng-app="app4" ng-controller="jsLoadProdutoID" contenteditable='true'>
+      <td id="div4" class="container" contenteditable='true'>
         <select id="produtoSelected">
-          <option id="{{ 'produtoID' + $index }}" ng-repeat="x in IDs">{{x.ID}}</option>
+          <option></option>
         </select>
       </td>
-      <td id="div5" class="container" ng-app="app5" ng-controller="jsLoadLojaID" contenteditable='true'>
+      <td id="div5" class="container" contenteditable='true'>
         <select id="lojaSelected">
-          <option id="{{ 'lojaID' + $index }}" ng-repeat="x in IDs">{{x.ID}}</option>
+          <option></option>
         </select>
       </td>
       <td id="estoqueQuantidade" contenteditable='true'></td>
@@ -282,13 +238,6 @@
       </td>
     </table>
   </div>
-
-  <div id="divFooter">
-    <footer class="container-fluid bg-4 text-center">
-      <p>Site feito por Gabriel Chaves Ferreira</p>
-    </footer>
-  </div>
-
 
 <div class="template" style="display: none">
   <table>
@@ -311,18 +260,6 @@
 
 
   <script>
-    angular.
-      bootstrap(document.getElementById("div2"), ['app2']);
-
-    angular.
-      bootstrap(document.getElementById("div3"), ['app3']);
-
-    angular.
-      bootstrap(document.getElementById("div4"), ['app4']);
-
-    angular.
-      bootstrap(document.getElementById("div5"), ['app5']);
-
     function removeProduto(linha) {
         var array = [
           {

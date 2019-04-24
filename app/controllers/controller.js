@@ -23,12 +23,6 @@ exports.getProdutos = (req, res) => {
     res.send(obj);
 };
 
-exports.getProdutoIDS = (req, res) => {
-    knex.schema.raw("SELECT ID FROM PRODUTO").then(function (ID_Produto) {
-        res.send(ID_Produto);
-    });
-};
-
 exports.adicionaProduto = (req, res) => {
     knex('PRODUTO')
         .insert(req).then(function () {
@@ -66,12 +60,6 @@ exports.getLoja = (req, res) => {
     ];
 
     res.send(obj);
-};
-
-exports.getLojaIDS = (req, res) => {
-    knex.schema.raw("SELECT ID FROM LOJA").then(function (ID_LOJA) {
-        res.send(ID_LOJA);
-    });
 };
 
 exports.adicionaLoja = (req, res) => {

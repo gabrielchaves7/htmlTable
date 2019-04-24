@@ -1,12 +1,3 @@
-var knex = require('knex')({
-    client: 'mysql',
-    connection: {
-        host: '127.0.0.1',
-        user: 'nerus',
-        password: '123456',
-        database: 'chaves'
-    }
-});
 module.exports = function (app) {
     var express = require("express");
     var router = express.Router();
@@ -90,12 +81,6 @@ module.exports = function (app) {
             }
             controllerRoute.updateEstoque(data);
         });
-
-    app.get('/api/produtoIDS/all', controllerRoute.getProdutoIDS);
-
-    app.get('/api/lojaIDS/all', controllerRoute.getLojaIDS);
-
-
 
     app.use("*", (req, res) => {
         res.sendFile(path + "404.html");
