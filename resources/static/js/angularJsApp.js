@@ -18,7 +18,7 @@ app.controller('loadProdutos', function ($scope, $http, $location) {
 	});
 });
 
-app2.controller('jsLoadLoja', function ($scope, $http, $location) {
+app2.controller('loadLoja', function ($scope, $http, $location) {
 	$scope.loja = [];
 
 	var url = "/api/loja";

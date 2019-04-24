@@ -165,7 +165,7 @@
     </div>
   </div>
 
-  <div id="div2" class="container" ng-app="app2" ng-controller="jsLoadLoja">
+  <div id="div2" class="container" ng-app="app2" ng-controller="loadLoja">
     <br>
     <br>
     <br>
@@ -323,43 +323,24 @@
     angular.
       bootstrap(document.getElementById("div5"), ['app5']);
 
-    function removeProduto(r) {
-      var ID = produtoId;
-      var i = r.parentNode.parentNode.rowIndex;
-      if (i == 1) {
-        if (ID.innerHTML == undefined) {
-          ID = ID[0].innerHTML;
-        } else {
-          ID = ID.innerHTML;
-        }
+    function removeProduto(linha) {
         var array = [
           {
-            "ID": ID
+            "ID": linha.parentNode.parentNode.querySelectorAll('#produtoId')[0].innerText
           }
         ]
-      } else {
-        ID = ID[i - 1].innerHTML;
-        var array = [
-          {
-            "ID": ID
-          }
-        ]
-      }
-      axios.post('/api/produtos', array)
-        .then(function (response) {
-          location.reload();
-        });
+
+      axios.post('/api/produtos', array).then(function (response) {
+        //location.reload();
+      });
     }
 
     function AddProduto(r) {
-      var id = $('.idProduto').text();
-      var nome = $('.nomeProduto').text();
-      var unidade = $('.unidadeProduto').text();
       var array = [
         {
-          "ID": id,
-          "Nome": nome,
-          "Unidade": unidade
+          "ID": $('.idProduto').text(),
+          "Nome": $('.nomeProduto').text(),
+          "Unidade": $('.unidadeProduto').text()
         }
       ]
       var template = $('.template').find('tr').clone();
@@ -375,20 +356,13 @@
         });
     }
 
-    function saveProduto(r) {
-      var ID = produtoId;
-      var nome = produtoNome;
-      var unidade = produtoUnidade;
-      var i = r.parentNode.parentNode.rowIndex;
-      ID = ID[i - 1].innerHTML;
-      nome = nome[i - 1].innerHTML;
-      unidade = unidade[i - 1].innerHTML;
-
+    function saveProduto(linha) {
+      var tdProduto = linha.parentNode.parentNode;
       var array = [
         {
-          "ID": ID,
-          "Nome": nome,
-          "Unidade": unidade
+          "ID": tdProduto.querySelectorAll('#produtoId')[0].innerText,
+          "Nome": tdProduto.querySelectorAll('#produtoNome')[0].innerText,
+          "Unidade": tdProduto.querySelectorAll('#produtoUnidade')[0].innerText
         }
       ]
       axios.put('/api/produtos', array)
@@ -397,29 +371,13 @@
         });
     }
 
-    function removeLoja(r) {
-      var ID = lojaId;
-      var i = r.parentNode.parentNode.rowIndex;
-      if (i == 1) {
-        if (ID.innerHTML == undefined) {
-          ID = ID[0].innerHTML;
-        } else {
-          ID = ID.innerHTML;
-        }
+    function removeLoja(linha) {
         var array = [
           {
-            "ID": ID
+            "ID": linha.parentNode.parentNode.querySelectorAll("#lojaId")[0].innerText
           }
-        ]
-      } else {
-        ID = ID[i - 1].innerHTML;
-        var array = [
-          {
-            "ID": ID
-          }
-        ]
-      }
-      axios.post('/removeLoja', array)
+        ]      
+      axios.post('/api/loja', array)
         .then(function (response) {
           location.reload();
         });
@@ -440,17 +398,13 @@
         });
     }
 
-    function saveLoja(r) {
-      var ID = lojaId;
-      var nome = lojaNome;
-      var i = r.parentNode.parentNode.rowIndex;
-      ID = ID[i - 1].innerHTML;
-      nome = nome[i - 1].innerHTML;
+    function saveLoja(linha) {
+      var tdLoja = linha.parentNode.parentNode;    
 
       var array = [
         {
-          "ID": ID,
-          "Nome": nome,
+          "ID": tdLoja.querySelectorAll('#lojaId')[0].innerText,
+          "Nome": tdLoja.querySelectorAll('#lojaNome')[0].innerText,
         }
       ]
       axios.post('/updateLoja', array)
@@ -459,34 +413,15 @@
         });
     }
 
-    function removeEstoque(r) {
-      var ProdutoID = fk_ProdutoID;
-      var LojaID = fk_LojaID;
-      var i = r.parentNode.parentNode.rowIndex;
-      if (i == 1) {
-        if (ProdutoID.innerHTML == undefined && LojaID.innerHTML == undefined) {
-          ProdutoID = ProdutoID[0].innerHTML;
-          LojaID = LojaID[0].innerHTML;
-        } else {
-          ProdutoID = ProdutoID.innerHTML;
-          LojaID = LojaID.innerHTML;
+    function removeEstoque(linha) {
+      var tdEstoque = linha.parentNode.parentNode;
+
+      var array = [
+        {
+          "ID_Produto": tdEstoque.querySelectorAll('#fk_ProdutoID'),
+          "ID_Loja": tdEstoque.querySelectorAll('#fk_LojaID')
         }
-        var array = [
-          {
-            "ID_Produto": ProdutoID,
-            "ID_Loja": LojaID
-          }
-        ]
-      } else {
-        ProdutoID = ProdutoID[i - 1].innerHTML;
-        LojaID = LojaID[i - 1].innerHTML;
-        var array = [
-          {
-            "ID_Produto": ProdutoID,
-            "ID_Loja": LojaID
-          }
-        ]
-      }
+      ]
 
       axios.post('/api/estoque', array)
         .then(function (response) {
@@ -495,29 +430,13 @@
     }
 
     function addEstoque(r) {
-      var i = r.parentNode.parentNode.rowIndex;
-      var selectedProdutoID = document.getElementById("produtoSelected").selectedIndex;
-      var selectedLojaIndex = document.getElementById("lojaSelected").selectedIndex;
-      var dropDownIDS = document.querySelectorAll('option');
-      for (var i = 0; i < dropDownIDS.length; ++i) {
-        var currentID = dropDownIDS[i].id;
-        indexSelected = currentID.slice(-1);
-        if (indexSelected == selectedProdutoID) {
-          var idPR = dropDownIDS[i].innerHTML;
-          for (var i = 0; i < dropDownIDS.length; ++i) {
-            currentID = dropDownIDS[i].id;
-            indexSelected = currentID.slice(-1);
-            if (indexSelected == selectedLojaIndex) {
-              var idLo = dropDownIDS[i].innerHTML;
-            }
-          }
-        }
-      }
+      var selectedProduto = document.getElementById("produtoSelected");
+      var selectedLoja = document.getElementById("lojaSelected");
       var array = [
         {
-          "ID_Produto": idPR,
-          "ID_Loja": idLo,
-          "Quantidade": estoqueQuantidade.textContent
+          "ID_Produto": selectedProduto.options[sel.selectedIndex].text,
+          "ID_Loja": selectedLoja.options[sel.selectedIndex].text,
+          "Quantidade": document.getElementById("estoqueQuantidade").innerHTML
         }
       ]
       axios.post('/adicionaEstoque', array)
@@ -526,20 +445,14 @@
         });
     }
 
-    function saveEstoque(r) {
-      var ProdutoID = fk_ProdutoID;
-      var LojaID = fk_LojaID;
-      var Quantidade = quantidade;
-      var i = r.parentNode.parentNode.rowIndex;
-      ProdutoID = ProdutoID[i - 1].innerHTML;
-      LojaID = LojaID[i - 1].innerHTML;
-      Quantidade = Quantidade[i - 1].innerHTML;
+    function saveEstoque(linha) {
+      var tdEstoque = linha.parentNode.parentNode;
+
       var array = [
         {
-
-          "ID_Produto": ProdutoID,
-          "ID_Loja": LojaID,
-          "Quantidade": Quantidade
+          "ID_Produto":  tdEstoque.querySelectorAll('#fk_ProdutoID'),
+          "ID_Loja": tdEstoque.querySelectorAll('#fk_LojaID'),
+          "Quantidade": tdEstoque.querySelectorAll('#quantidade')
         }
       ]
       axios.put('/api/estoque', array)
@@ -549,7 +462,7 @@
     }
 
     function Cancel() {
-      location.reload();
+      //location.reload();
     }
 
 

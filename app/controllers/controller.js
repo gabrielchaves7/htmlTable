@@ -9,9 +9,18 @@ var knex = require('knex')({
 });
 
 exports.getProdutos = (req, res) => {
-    knex.select().from('PRODUTO').then(function (produtos) {
-        res.send(produtos);
-    });
+    // knex.select().from('PRODUTO').then(function (produtos) {
+    //     res.send(produtos);
+    // });
+    var obj = [
+        {
+            "ID": "1",
+            "Nome": "Arroz",
+            "Unidade": "30"
+        }
+    ];
+
+    res.send(obj);
 };
 
 exports.getProdutoIDS = (req, res) => {
@@ -45,9 +54,18 @@ exports.updateProduto = (req, res) => {
 };
 
 exports.getLoja = (req, res) => {
-    knex.select().from('LOJA').then(function (lojas) {
-        res.send(lojas);
-    });
+    // knex.select().from('LOJA').then(function (lojas) {
+    //     res.send(lojas);
+    // });
+
+    var obj = [
+        {
+            "ID": "1",
+            "Nome": "Loja1"
+        }
+    ];
+
+    res.send(obj);
 };
 
 exports.getLojaIDS = (req, res) => {
@@ -94,9 +112,19 @@ exports.remove  = (req, res) => {
 };
 
 exports.getEstoque = (req, res) => {
-    knex.select().from('Estoque').then(function (estoques) {
-        res.send(estoques);
-    });
+    // knex.select().from('Estoque').then(function (estoques) {
+    //     res.send(estoques);
+    // });
+
+    var obj = [
+        {
+            "ID_Produto": "1",
+            "ID_Loja": "1",
+            "Quantidade": 40
+        }
+    ];
+
+    res.send(obj);
 };
 
 exports.removeEstoque  = (req, res) => {

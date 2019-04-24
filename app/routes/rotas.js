@@ -8,7 +8,6 @@ var knex = require('knex')({
     }
 });
 module.exports = function (app) {
-
     var express = require("express");
     var router = express.Router();
 
@@ -33,7 +32,7 @@ module.exports = function (app) {
 
     app.route('/api/produtos')
         .get(function(req, res) {
-            controllerRoute.getProdutos;
+            controllerRoute.getProdutos(req, res);
         })
         .post(function(req, res) {
             var requisicao = gerarRequisicaoParaRemover(req.body[0].ID, "PRODUTO");
@@ -54,7 +53,7 @@ module.exports = function (app) {
     
     app.route('/api/loja')
         .get(function(req, res) {
-            controllerRoute.getLoja;
+            controllerRoute.getLoja(req,res);
         })
         .post(function(req, res) {
             var requisicao = gerarRequisicaoParaRemover(req.body[0].ID, "LOJA");
@@ -75,7 +74,7 @@ module.exports = function (app) {
 
     app.route('/api/estoque')
         .get(function(req, res) {
-            controllerRoute.getEstoque;
+            controllerRoute.getEstoque(req, res);
         })
         .post(function(req, res) {
             var data = {
